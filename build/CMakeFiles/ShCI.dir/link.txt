@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../bin/libShCI.a CMakeFiles/ShCI.dir/ShCI/src/ShCI.c.o
+/usr/bin/ranlib ../bin/libShCI.a
