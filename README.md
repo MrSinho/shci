@@ -9,7 +9,7 @@ You can use an old pc or a virtual machine as host device for building your gith
 int main(void) {    
     //Clone repository
     shci_github_repo_info info = 
-                shci_get_github_repo("username", "repo-name", "access-token", "repo-dir);    
+                shci_get_github_repo("username", "repo-name", "access-token", "repo-dir");    
     
     //you can install the tools on your own with a system command, this is not necessary
     shci_toolchain_flags flags =    shci_c_toolchain | shci_cxx_toolchain | shci_python3_toolchain;
