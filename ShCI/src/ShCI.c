@@ -3,10 +3,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-void shci_call(const char* script, shci_github_repo_info info) {
+void shci_call(const char* script, int pass_on_success, shci_github_repo_info info) {
     if (system(script) != 0) { 
         shci_build_failure(info); 
         shci_end_failure(); 
+        return;
+    }
+    if (pass_on_success) {
+        shci_build_passing(info);
     }
 }
 
@@ -84,6 +88,13 @@ char* shci_read_text(const char* path) {
 	free(stream);
 
 	return code;
+}
+
+void shci_write_text(const char* buffer, const char* path) {
+    FILE* stream = fopen(path, "w");
+    if (stream == NULL) { return; }
+    fwrite(buffer, strlen(path), 1, stream);
+    free(stream);
 }
 
 void shci_build_passing(const shci_github_repo_info info) {
