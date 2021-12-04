@@ -11,22 +11,33 @@ void shci_call(const char* script, shci_github_repo_info info) {
 }
 
 void shci_get_toolchain(shci_toolchain_flags flags, shci_github_repo_info info) {
-#ifdef __linux
+#ifdef _WIN32
     if (flags & shci_c_toolchain) {
-        const char* script = "apt install -y wget gcc cmake make gdb";    
-        shci_call(script, info);    
+        system("choco install -a wget mingw cmake");
+        system("mingw-get install gcc mingw32-make gdb");    
     }
     if (flags & shci_cxx_toolchain) {
-        const char* script = "apt install -y wget g++ cmake make gdb";    
-        shci_call(script, info);        
+        system("choco install -a wget mingw cmake");
+        system("mingw-get install g++ mingw32-make gdb");    
     }
     if (flags & shci_python2_toolchain) {
-        const char* script = "apt install -y wget python2";    
-        shci_call(script, info);        
+        system("choco install -y wget python2");    
     }
     if (flags & shci_python3_toolchain) {
-        const char* script = "apt install -y wget python3";     
-        shci_call(script, info);       
+        system("choco install -y wget python3");    
+    }
+#else 
+    if (flags & shci_c_toolchain) {
+        system("apt install -y wget gcc cmake make gdb");    
+    }
+    if (flags & shci_cxx_toolchain) {
+        system("apt install -y wget g++ cmake make gdb");        
+    }
+    if (flags & shci_python2_toolchain) {
+        system("apt install -y wget python2");        
+    }
+    if (flags & shci_python3_toolchain) {
+        system("apt install -y wget python3");        
     }
 #endif // __linux__    
     
