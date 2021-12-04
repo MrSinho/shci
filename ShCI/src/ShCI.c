@@ -13,11 +13,11 @@ void shci_call(const char* script, shci_github_repo_info info) {
 void shci_get_toolchain(shci_toolchain_flags flags, shci_github_repo_info info) {
 #ifdef _WIN32
     if (flags & shci_c_toolchain) {
-        system("choco install -a wget mingw cmake");
+        system("choco install -y wget mingw cmake");
         system("mingw-get install gcc mingw32-make gdb");    
     }
     if (flags & shci_cxx_toolchain) {
-        system("choco install -a wget mingw cmake");
+        system("choco install -y wget mingw cmake");
         system("mingw-get install g++ mingw32-make gdb");    
     }
     if (flags & shci_python2_toolchain) {
