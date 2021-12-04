@@ -34,7 +34,7 @@ void shci_get_toolchain(shci_toolchain_flags flags, shci_github_repo_info info) 
 
 shci_github_repo_info shci_get_github_repo(const char* username, const char* repo_name, const char* access_token, const char* path) {
     char del[256];
-#ifdef WIN32
+#ifdef _WIN32
     strcpy(del, "rmdir -r ");
 #else
     strcpy(del, "rm -rf ");
@@ -84,7 +84,7 @@ void shci_build_passing(const shci_github_repo_info info) {
     strcpy(set, "cd ");
     strcat(set, info.path);
     strcat(set, " && git config user.name \"ShCI\" && git config user.email \"none\"");
-#ifdef WIN32
+#ifdef _WIN32
     strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/build-passing-green.svg && ren build-passing-green.svg status.svg");
 #else
     strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/build-passing-green.svg && mv build-passing-green.svg status.svg");
@@ -107,7 +107,7 @@ void shci_build_failure(const shci_github_repo_info info) {
     strcpy(set, "cd ");
     strcat(set, info.path);
     strcat(set, " && git config user.name \"ShCI\" && git config user.email \"none\"");
-#ifdef WIN32
+#ifdef _WIN32
     strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/build-failing-red.svg && ren build-failing-red.svg status.svg");
 #else 
     strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/build-failing-red.svg && mv build-failing-red.svg status.svg");
