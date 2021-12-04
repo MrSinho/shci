@@ -67,7 +67,7 @@ shci_github_repo_info shci_get_github_repo(const char* username, const char* rep
     strcat(clone, " ");
     strcat(clone, path);
     shci_github_repo_info info = { username, repo_name, access_token, path };
-    shci_call(clone, info);
+    shci_call(clone, 0, info);
     return info;
 } 
 
