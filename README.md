@@ -18,7 +18,7 @@ int main(void) {
     //Run your scripts
     //Install required dev kits 
     const char* prerequisites_script = shci_read_text("bash_commands.sh");
-    shci_call(prerequisites_script, info);
+    shci_call(prerequisites_script, info); // if it fails, downloads a failing badge
     //Compile the code
     const char* compile_script = "cd repo-dir && mkdir build && cd build && cmake .. && make";
     shci_call(compile_script, info);
