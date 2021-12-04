@@ -126,6 +126,5 @@ void shci_end_success() {
 }
 
 void shci_end_failure() {
-    printf("shci message: failed running scripts, aborting...\n");
-    exit(-1);
+    printf("shci message: failed running scripts\n");
 }
