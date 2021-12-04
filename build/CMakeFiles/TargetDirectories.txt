@@ -1,3 +1,0 @@
-/home/mrsinho/Desktop/_ShCI/build/CMakeFiles/rebuild_cache.dir
-/home/mrsinho/Desktop/_ShCI/build/CMakeFiles/edit_cache.dir
-/home/mrsinho/Desktop/_ShCI/build/CMakeFiles/ShCI.dir
