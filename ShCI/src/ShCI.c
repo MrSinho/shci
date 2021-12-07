@@ -47,7 +47,7 @@ void shci_get_toolchain(shci_toolchain_flags flags, shci_github_repo_info info) 
     
 }
 
-shci_github_repo_info shci_get_github_repo(const char* username, const char* repo_name, const char* access_token, const char* path) {
+shci_github_repo_info shci_get_github_repo(const char* username, const char* repo_name, int recursive, const char* access_token, const char* path) {
     char del[256];
 #ifdef _WIN32
     strcpy(del, "rmdir -r ");
@@ -58,7 +58,12 @@ shci_github_repo_info shci_get_github_repo(const char* username, const char* rep
     system(del);
     system("apt install git-core");
     char clone[1024];
-    strcpy(clone, "git clone --recursive https://");
+    if (recursive) {
+        strcpy(clone, "git clone --recursive https://");
+    }
+    else {
+        strcpy(clone, "git clone https://");
+    }
     strcat(clone, access_token);
     strcat(clone, "@github.com/");
     strcat(clone, username);

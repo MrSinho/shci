@@ -23,7 +23,7 @@ extern void shci_call(const char* script, int pass_on_success, shci_github_repo_
 
 extern void shci_get_toolchain(shci_toolchain_flags flags, shci_github_repo_info info);
 
-extern shci_github_repo_info shci_get_github_repo(const char* username, const char* repo_name, const char* access_token, const char* path);
+extern shci_github_repo_info shci_get_github_repo(const char* username, const char* repo_name, int recursive, const char* access_token, const char* path);
 
 extern char* shci_read_text(const char* path);
 
