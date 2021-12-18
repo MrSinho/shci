@@ -83,22 +83,25 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
             offset += (uint32_t)strlen(title);
             fseek(stream, offset, SEEK_SET);
 
-            const char* paragraph_start = "\n```bash";
+            const char* paragraph_start = "\n```bash ";
             const char* paragraph_end = "\n```\n";
             for (uint32_t i = 0; i < info->i; i++) {
                 if (memcmp(info->logs[i], call, strlen(call)) == 0) {
                     if (i != 0) {
                         fwrite(paragraph_end, 1, strlen(paragraph_end), stream);
-                        offset += (uint32_t)strlen(paragraph_end);
-                        fseek(stream, offset, SEEK_SET);
+                        //offset += (uint32_t)strlen(paragraph_end);
+                        //fseek(stream, offset, SEEK_SET);
+                        fseek(stream, 0, SEEK_END);
                     }
                     fwrite(paragraph_start, 1, strlen(paragraph_start), stream);
-                    offset += (uint32_t)strlen(paragraph_start);
-                    fseek(stream, offset, SEEK_SET);
+                    //offset += (uint32_t)strlen(paragraph_start);
+                    //fseek(stream, offset, SEEK_SET);
+                    fseek(stream, 0, SEEK_END);
                 }
                 fwrite(info->logs[i], 1, info->sizes[i], stream);
-                offset += info->sizes[i];
-                fseek(stream, offset, SEEK_SET);
+                //offset += info->sizes[i];
+                //fseek(stream, offset, SEEK_SET);
+                fseek(stream, 0, SEEK_END);
             }
             fwrite(paragraph_end, 1, strlen(paragraph_end), stream);
         }
