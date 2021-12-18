@@ -214,7 +214,7 @@ void shci_build_passing(shci_github_repo_info* info) {
 #else
     strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/linux-passing-green.svg  && mv linux-passing-green.svg linux-status.svg");
 #endif
-    strcat(set, " && cd .. && git add .ShCI && git commit -m \"ShCI status\" && git push https://");
+    strcat(set, " && cd .. && git add --all && git commit -a -m \"ShCI status\" && git push https://");
     strcat(set, info->access_token);
     strcat(set, "@github.com/");
     strcat(set, info->username);
@@ -237,7 +237,7 @@ void shci_build_failure(shci_github_repo_info* info) {
 #else 
     strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/linux-failing-red.svg && mv linux-failing-red.svg linux-status.svg");
 #endif
-    strcat(set, "&& cd .. && git add .ShCI && git commit -m \"ShCI status\" && git push https://");
+    strcat(set, "&& cd .. && git add --all && git commit -a -m \"ShCI status\" && git push https://");
     strcat(set, info->access_token);
     strcat(set, "@github.com/");
     strcat(set, info->username);
