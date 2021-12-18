@@ -149,7 +149,7 @@ shci_github_repo_info shci_get_github_repo(const char* username, const char* rep
 #ifdef _WIN32
     shci_call("choco install -y git", 0, 0, NULL);
 #else
-    shci_call("apt install -y git-core", 0, 1, NULL);
+    shci_call("apt install -y git-core", 0, 0, NULL);
 #endif // _WIN32
     char clone[1024];
     (recursive) ? strcpy(clone, "git clone --recursive https://") : strcpy(clone, "git clone https://");
