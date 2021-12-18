@@ -1,6 +1,16 @@
 # ShCI
+[![linux_badge](.ShCI/linux-status.svg)](https://github.com/MrSinho/ShCI/tree/main/.ShCI/linux-log.md)
+[![windows_badge](.ShCI/windows-status.svg)](https://github.com/MrSinho/ShCI/tree/main/.ShCI/windows-log.md)
 
-An open source tool for implementing continuous integration in your github project.
+An open source tool for implementing continuous integration in your github project, you can find some example with the following projects:
+ * [PlyImporter](https://github.com/MrSinho/PlyImporter)
+ * [ShSerial](https://github.com/MrSinho/ShSerial)
+ * [ShECS](https://github.com/MrSinho/ShECS)
+ * [bmp280_driver](https://github.com/MrSinho/bmp280_driver)
+
+## Functionalities:
+ - [x] Cross platform (Windows and Linux support)
+ - [x] Writes an output file for each platform [![linux_badge](.ShCI/linux-status.svg)](https://github.com/MrSinho/ShCI/tree/main/.ShCI/linux-log.md) [![windows_badge](.ShCI/windows-status.svg)](https://github.com/MrSinho/ShCI/tree/main/.ShCI/windows-log.md)
 
 ## How it works
 
@@ -29,8 +39,9 @@ int main(void) {
     return 0;
 }
 ```
-In your `README.md`:
+In repo `README.md`:
 ```markdown
-![Status_badge](.ShCI/status.svg)
+[![linux_badge](.ShCI/linux-status.svg)](https://github.com/user/repo/tree/main/.ShCI/linux-log.md)
+
+[![windows_badge](.ShCI/windows-status.svg)](https://github.com/user/repo/tree/main/.ShCI/windows-log.md)
 ```
-It could be either a passing badge ![passing_badge](https://img.shields.io/badge/build-passing-green.svg) or a failing badge ![failing_badge](https://img.shields.io/badge/build-failing-red.svg).
