@@ -122,16 +122,16 @@ void shci_get_toolchain(shci_toolchain_flags flags, shci_github_repo_info* info)
     }
 #else 
     if (flags & shci_c_toolchain) {
-        shci_call("apt install -y curl gcc cmake make gdb", 0, 1, info);    
+        shci_call("apt install -y wget gcc cmake make gdb", 0, 1, info);    
     }
     if (flags & shci_cxx_toolchain) {
-        shci_call("apt install -y curl g++ cmake make gdb", 0, 1, info);        
+        shci_call("apt install -y wget g++ cmake make gdb", 0, 1, info);        
     }
     if (flags & shci_python2_toolchain) {
-        shci_call("apt install -y curl python2", 0, 1, info);        
+        shci_call("apt install -y wget python2", 0, 1, info);        
     }
     if (flags & shci_python3_toolchain) {
-        shci_call("apt install -y curl python3", 0, 1, info);        
+        shci_call("apt install -y wget python3", 0, 1, info);        
     }
 #endif // __linux__    
     
@@ -212,7 +212,7 @@ void shci_build_passing(shci_github_repo_info* info) {
 #ifdef _WIN32
     strcat(set, " && cd .ShCI && curl https://img.shields.io/badge/windows-passing-green.svg -o windows-status.svg");
 #else
-    strcat(set, " && cd .ShCI && curl https://img.shields.io/badge/linux-passing-green.svg -o linux-status.svg");
+    strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/linux-passing-green.svg  && mv linux-passing-green.svg linux-status.svg");
 #endif
     strcat(set, " && cd .. && git add .ShCI && git commit -m \"ShCI status\" && git push https://");
     strcat(set, info->access_token);
@@ -235,7 +235,7 @@ void shci_build_failure(shci_github_repo_info* info) {
 #ifdef _WIN32
     strcat(set, " && cd .ShCI && curl https://img.shields.io/badge/windows-failing-red.svg -o windows-status.svg");
 #else 
-    strcat(set, " && cd .ShCI && curl https://img.shields.io/badge/linux-failing-red.svg -o linux-status.svg");
+    strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/linux-failing-red.svg && mv linux-failing-red.svg linux-status.svg");
 #endif
     strcat(set, "&& cd .. && git add .ShCI && git commit -m \"ShCI status\" && git push https://");
     strcat(set, info->access_token);
