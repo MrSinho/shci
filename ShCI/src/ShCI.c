@@ -2,29 +2,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #ifdef _MSC_VER
 #pragma warning (disable: 4996 4013 4047)
 #endif
 
 void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_github_repo_info* info) {
+    assert(info != NULL);
     int exit_code = 0;
-    if (log) {
+    if (!log) { 
+        exit_code = system(script); 
+    }
+    else {
         char call[528];
         strcpy(call, "$$shci call$$:\n");
-        info->sizes[info->i] += strlen(call);
+        info->sizes[info->i] = strlen(call);
         info->logs[info->i] = calloc(strlen(call), 1);
-        if (info->logs[info->i] == NULL) { return; }
+        assert(info->logs[info->i] != NULL);
         strcpy(info->logs[info->i], call);
         info->i++;
         strcpy(call, script);
         strcat(call, "\n");
-        info->sizes[info->i] += strlen(call);
+        info->sizes[info->i] = strlen(call);
         info->logs[info->i] = calloc(strlen(call), 1);
-        if (info->logs[info->i] == NULL) { return; }
+        assert(info->logs[info->i] != NULL);
         strcpy(info->logs[info->i], call);
         info->i++;
-        
         puts(call);
 #ifdef _MSC_VER
         FILE* file_pipe = _popen(script, "r");
@@ -32,29 +36,19 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
         FILE* file_pipe = popen(script, "r");
 #endif // _MSC_VER
         if (!file_pipe) { return; }
-
         char _log[1024];
         for (; fgets(_log, sizeof(_log), file_pipe)!=NULL; info->i++) {
             info->sizes[info->i] = strlen(_log);
             info->logs[info->i] = calloc(info->sizes[info->i], 1);
-            if (info->logs[info->i] == NULL) { break; }
+            assert(info->logs[info->i] != NULL);
             strcpy(info->logs[info->i], _log);
             printf("%s", _log);
         }
-
 #ifdef _MSC_VER
         exit_code = _pclose(file_pipe);
 #else 
         exit_code = pclose(file_pipe);
 #endif // _MSC_VER
-    }
-    else { exit_code = system(script); }
-    if (exit_code != 0) { 
-        if (pass_on_success) {
-            shci_build_failure(info); 
-            shci_end_failure(info); 
-        }
-        return;
     }
     if (pass_on_success) {
         char path[256];
@@ -81,7 +75,7 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
         offset += strlen(title);
         fseek(stream, offset, SEEK_SET);
 
-        const char* paragraph_start = "\n```bash\n";
+        const char* paragraph_start = "\n```bash";
         const char* paragraph_end = "```\n";
         const char* sig = "$$shci call$$:\n";
         for (uint32_t i = 0; i < info->i; i++) {
@@ -100,7 +94,14 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
             fseek(stream, offset, SEEK_SET);
         }
         fwrite(paragraph_end, 1, strlen(paragraph_end), stream);
+    }
+    if (exit_code != 0) { 
+        if (pass_on_success) {
+            shci_build_failure(info); 
+            shci_end_failure(info); 
+        }
         shci_build_passing(info);
+        shci_end_success(info);
     }
 }
 
@@ -145,12 +146,7 @@ shci_github_repo_info shci_get_github_repo(const char* username, const char* rep
     strcpy(del, "rm -rf ");
 #endif
     strcat(del, path);
-    shci_call(del, 0, 0, NULL);
-#ifdef _WIN32
-    shci_call("choco install -y git", 0, 0, NULL);
-#else
-    shci_call("apt install -y git-core", 0, 0, NULL);
-#endif // _WIN32
+    system(del);
     char clone[1024];
     (recursive) ? strcpy(clone, "git clone --recursive https://") : strcpy(clone, "git clone https://");
     strcat(clone, access_token);
