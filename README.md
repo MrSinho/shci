@@ -12,6 +12,10 @@ An open source tool for implementing continuous integration in your github proje
  - [x] Cross platform (Windows and Linux support)
  - [x] Writes an output file for each platform [![linux_badge](.ShCI/linux-status.svg)](https://github.com/MrSinho/ShCI/tree/main/.ShCI/linux-log.md) [![windows_badge](.ShCI/windows-status.svg)](https://github.com/MrSinho/ShCI/tree/main/.ShCI/windows-log.md)
 
+## To do:
+ * Information about the system in the output file
+ * Get time passed for each call
+
 ## How it works
 
 You can use an old pc or a virtual machine as host device for building your github project. Create a simple executable using this library as following:
