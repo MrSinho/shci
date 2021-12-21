@@ -27,7 +27,7 @@ cd ShCI && mkdir build && cd build && cmake .. && make
 -- Detecting C compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/mrsinho/Desktop/ShCI-implementation/build/ShCI/build
+-- Build files have been written to: /home/mrsinho/Desktop/ShCI-implementation/ShCI/ShCI/build
 Scanning dependencies of target ShCI
 [ 50%] Building C object CMakeFiles/ShCI.dir/ShCI/src/ShCI.c.o
 [100%] Linking C static library ../bin/libShCI.a
