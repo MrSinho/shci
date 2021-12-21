@@ -12,7 +12,7 @@ gcc is already the newest version (4:9.3.0-1ubuntu2).
 make is already the newest version (4.2.1-1.2).
 gdb is already the newest version (9.2-0ubuntu1~20.04).
 wget is already the newest version (1.20.3-1ubuntu2).
-0 upgraded, 0 newly installed, 0 to remove and 21 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 22 not upgraded.
 
 ```
 
@@ -27,7 +27,7 @@ cd ShCI && mkdir build && cd build && cmake .. && make
 -- Detecting C compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/mrsinho/Desktop/ShCI-implementation/bin/ShCI/build
+-- Build files have been written to: /home/mrsinho/Desktop/ShCI-implementation/build/ShCI/build
 Scanning dependencies of target ShCI
 [ 50%] Building C object CMakeFiles/ShCI.dir/ShCI/src/ShCI.c.o
 [100%] Linking C static library ../bin/libShCI.a
