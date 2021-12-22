@@ -1,7 +1,7 @@
 # ShCI
 ![windows_badge](windows-status.svg)
 ## [Windows build logs:](https://github.com/MrSinho/ShCI)
-  `Build ran for 3.70s`
+  `Build ran for 4.08s`
 ```bash $shci call$
 choco install -y curl mingw cmake
 Chocolatey v0.11.2
@@ -60,7 +60,7 @@ cd ShCI && mkdir build && cd build && cmake -G"MinGW Makefiles" .. && mingw32-ma
 -- Detecting C compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/Users/sino3/Desktop/GitHub/ShCI-implementation/bin/Debug/ShCI/build
+-- Build files have been written to: C:/Users/sino3/Desktop/GitHub/ShCI-implementation/bin/ShCI/build
 [ 50%] Building C object CMakeFiles/ShCI.dir/ShCI/src/ShCI.c.obj
 [100%] Linking C static library ..\bin\libShCI.a
 [100%] Built target ShCI
