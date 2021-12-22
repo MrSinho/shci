@@ -14,7 +14,6 @@ An open source tool for implementing continuous integration in your github proje
 
 ## To do:
  * Information about the system in the output file
- * Get time passed for each call
 
 ## How it works
 

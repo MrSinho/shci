@@ -35,6 +35,7 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
         }
 
         {
+            info->start = clock();
 #ifdef _MSC_VER
             FILE* fp = _popen(script, "r");
 #else
@@ -54,6 +55,7 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
 #else 
             exit_code = pclose(fp);
 #endif // _MSC_VER
+            info->end = clock();
         }
 
         if (pass_on_success) {
@@ -82,6 +84,11 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
 
             const char* paragraph_start = "\n```bash ";
             const char* paragraph_end = "\n```\n";
+            char build_ran_for[128];
+            sprintf(build_ran_for, "`Build ran for %.2fs`", ((float)(info->end-info->start))/1000.0f);
+            puts(build_ran_for);
+            fwrite(build_ran_for, 1, strlen(build_ran_for), stream);
+            fseek(stream, 0, SEEK_END);
             for (uint32_t i = 0; i < info->i; i++) {
                 if (memcmp(info->logs[i], call, strlen(call)) == 0) {
                     if (i != 0) {

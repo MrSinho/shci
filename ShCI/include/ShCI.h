@@ -2,6 +2,7 @@
 #define SHCI_H
 
 #include <stdint.h>
+#include <time.h>
 
 typedef enum shci_toolchain_flags {
     shci_c_toolchain = 0b0001,
@@ -19,6 +20,8 @@ typedef struct shci_github_repo_info {
     char* logs[1024];
     uint32_t sizes[1024];
     uint32_t i;
+    clock_t start;
+    clock_t end;
 } shci_github_repo_info;
 
 
