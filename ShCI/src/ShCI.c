@@ -62,9 +62,9 @@ void shci_call(const char* script, uint8_t pass_on_success, uint8_t log, shci_gi
             char path[528];
             strcpy(path, info->path);
 #ifdef _WIN32
-            strcat(path, "/.ShCI/windows-log.md");
+            strcat(path, "/.shci/windows-log.md");
 #else
-            strcat(path, "/.ShCI/linux-log.md");
+            strcat(path, "/.shci/linux-log.md");
 #endif // _WIN32
 
             FILE* stream = fopen(path, "w");
@@ -211,15 +211,15 @@ void shci_build_passing(shci_github_repo_info* info) {
     char set[1024];
     strcpy(set, "cd ");
     strcat(set, info->path);
-    strcat(set, " && mkdir .ShCI");
+    strcat(set, " && mkdir .shci");
     system(set);
     strcpy(set, "cd ");
     strcat(set, info->path);
     strcat(set, " && git config user.name \"ShCI\" && git config user.email \"none\"");
 #ifdef _WIN32
-    strcat(set, " && cd .ShCI && curl https://img.shields.io/badge/windows-passing-green.svg -o windows-status.svg");
+    strcat(set, " && cd .shci && curl https://img.shields.io/badge/windows-passing-green.svg -o windows-status.svg");
 #else
-    strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/linux-passing-green.svg  && mv linux-passing-green.svg linux-status.svg");
+    strcat(set, " && cd .shci && wget https://img.shields.io/badge/linux-passing-green.svg  && mv linux-passing-green.svg linux-status.svg");
 #endif
     strcat(set, " && cd .. && git add --all && git commit -a -m \"ShCI status\" && git push https://");
     strcat(set, info->access_token);
@@ -234,15 +234,15 @@ void shci_build_failure(shci_github_repo_info* info) {
     char set[1024];
     strcpy(set, "cd ");
     strcat(set, info->path);
-    strcat(set, " && mkdir .ShCI");
+    strcat(set, " && mkdir .shci");
     system(set);
     strcpy(set, "cd ");
     strcat(set, info->path);
     strcat(set, " && git config user.name \"ShCI\" && git config user.email \"none\"");
 #ifdef _WIN32
-    strcat(set, " && cd .ShCI && curl https://img.shields.io/badge/windows-failing-red.svg -o windows-status.svg");
+    strcat(set, " && cd .shci && curl https://img.shields.io/badge/windows-failing-red.svg -o windows-status.svg");
 #else 
-    strcat(set, " && cd .ShCI && wget https://img.shields.io/badge/linux-failing-red.svg && mv linux-failing-red.svg linux-status.svg");
+    strcat(set, " && cd .shci && wget https://img.shields.io/badge/linux-failing-red.svg && mv linux-failing-red.svg linux-status.svg");
 #endif
     strcat(set, "&& cd .. && git add --all && git commit -a -m \"ShCI status\" && git push https://");
     strcat(set, info->access_token);
