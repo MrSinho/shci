@@ -32,9 +32,9 @@ class shci_github_repo_info:
         self.markdown = f"""
 # {_repo_name}
 
-![{_os}-badge]({_os}-status.svg)
+![{self._os}-badge]({self._os}-status.svg)
 
-## [{_os} build logs:](https://github.com/mrsinho/shci)
+## [{self._os} build logs:](https://github.com/mrsinho/shci)
 
         """#`build ran for` /// `calls`
 
@@ -42,26 +42,26 @@ class shci_github_repo_info:
 
 def shci_call(repo:shci_github_repo_info, cmd:str) -> bool:
     r:_wrap_close = os.popen(cmd)
-    chunk:str = f"""
+    output:str = r.read()
+    repo.markdown += f"""
 ```bash
 {cmd}
 ```
 
 ```bash
-{r.read()}
+{output}
 ```
 
 ---
 
     """
-    repo.markdown += chunk
 
-    print(f"shci: {chunk}")
+    print(f"shci call: {cmd}\nshci call output: {output}")
 
-    exit_code:bool
-    
+    r._stream.close()
+    exit_code = r._proc.wait()
 
-    return 1#
+    return exit_code
 
 def shci_write_text(path:str, text: str):
     file:TextIOWrapper = open(path, "w")
@@ -115,8 +115,8 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
     os.system(clone_badge)
 
     push:str = f"git add --all && git commit -a -m \"shci status\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
-    print(f"shci: {push}")
     if (repo.push == True):
+        print(f"shci: {push}")
         os.system(push)
 
     shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
@@ -140,7 +140,7 @@ def main():
     repo_name:str = args[2]
     recursive:bool = bool(args[3])
     repo_dir:str = args[4]
-    push:bool = bool(args[5] == "True")
+    push:bool = bool(args[5] == "True" or args[5] == "1")
 
     print(f"shci: {args}")
     if (len(args) < 8):
@@ -164,8 +164,16 @@ def main():
     print(f"shci: {prerequisites}")
     os.system(prerequisites)
     
-    r:bool = shci_call(repo, shci_read_text(build_script))
+
+    build_script:str = shci_read_text(build_script)
+    build_arr = build_script.split('\n')
+
+    r:bool = True
+    for call_idx in range (0, len(build_arr), 1):
+        r = r and (shci_call(repo, build_arr[call_idx]) == 0)
+
     shci_build_status(repo, r)
+
 
     return
 
