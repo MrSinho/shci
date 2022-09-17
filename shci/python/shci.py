@@ -142,6 +142,7 @@ def main():
     repo_dir:str = args[4]
     push:bool = bool(args[5])
 
+    print(f"shci: {args}")
     if (len(args) < 8):
         print("shci: Missing repository data")
         return
