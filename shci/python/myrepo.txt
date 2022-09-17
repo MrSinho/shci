@@ -1,9 +1,0 @@
-mrsinho
-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
-shtemplate
-True
-shtemplate-clone
-False
-
-prerequisites.txt
-build.txt

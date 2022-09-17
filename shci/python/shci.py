@@ -32,7 +32,7 @@ class shci_github_repo_info:
         self.markdown = f"""
 # {_repo_name}
 
-![{_os}-badge]({_repo_name}/.shci/{_os}-status.svg)
+![{_os}-badge]({_os}-status.svg)
 
 ## [{_os} build logs:](https://github.com/mrsinho/shci)
 
@@ -140,7 +140,7 @@ def main():
     repo_name:str = args[2]
     recursive:bool = bool(args[3])
     repo_dir:str = args[4]
-    push:bool = bool(args[5])
+    push:bool = bool(args[5] == "True")
 
     print(f"shci: {args}")
     if (len(args) < 8):
