@@ -120,6 +120,8 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
         print("shci: Build failure\n")
         clone_badge:Response = requests.get("https://img.shields.io/badge/{repo._os}-failure-red.svg", )
         badge_file.write(clone_badge.content)
+    badge_file.flush()
+    badge_file.close()
 
     end:float = time.time()
     repo.markdown += f"""
