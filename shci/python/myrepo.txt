@@ -1,9 +1,9 @@
 mrsinho
 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
 shtemplate
-1
+True
 shtemplate-clone
-0
+False
 
 prerequisites.txt
 build.txt
