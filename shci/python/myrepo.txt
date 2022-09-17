@@ -1,0 +1,8 @@
+mrsinho
+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
+shtemplate
+1
+shtemplate-clone
+
+prerequisites.txt
+build.txt
