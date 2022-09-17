@@ -1,8 +1,11 @@
+from asyncio import base_futures
 from io import TextIOWrapper
 import os
 from os import _wrap_close
 import sys
 import platform
+import requests
+from requests import Response
 
 
 class shci_github_repo_info:
@@ -105,19 +108,20 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
     print(f"shci: {setup_log_dir}")
     os.system(setup_log_dir)
 
-    clone_badge:str = f"cd {repo.dir} && git config user.name \"shci\" && git config user.email \"none\""
+    badge_file:TextIOWrapper = open(f".shci/{repo._os}-status.svg", "wb")
     if (status == True):#success
         print("shci: Build success\n")
-        clone_badge += f"&& cd .shci && curl https://img.shields.io/badge/{repo._os}-passing-green.svg -o {repo._os}-status.svg"
+        clone_badge:Response = requests.get("https://img.shields.io/badge/{repo._os}-passing-green.svg", )
+        badge_file.write(clone_badge.content())
     else:
         print("shci: Build failure\n")
-        clone_badge += f"&& cd .shci && curl https://img.shields.io/badge/{repo._os}-failure-red.svg -o {repo._os}-status.svg"
-    print(f"shci: {clone_badge}")
-    os.system(clone_badge)
+        clone_badge:Response = requests.get("https://img.shields.io/badge/{repo._os}-failure-red.svg", )
+        badge_file.write(clone_badge.content())
 
     shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
 
-    push:str = f"cd {repo.dir} && git add --all && git commit -a -m \"shci status\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
+    push:str = f"cd {repo.dir} && git config user.name \"shci\" && git config user.email \"none\""
+    push += f" && cd {repo.dir} && git add --all && git commit -a -m \"shci status\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
     if (repo.push == True):
         print(f"shci: {push}")
         os.system(push)
