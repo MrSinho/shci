@@ -108,7 +108,7 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
     print(f"shci: {setup_log_dir}")
     os.system(setup_log_dir)
 
-    badge_file:TextIOWrapper = open(f".shci/{repo._os}-status.svg", "wb")
+    badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}-status.svg", "wb")
     if (status == True):#success
         print("shci: Build success\n")
         clone_badge:Response = requests.get("https://img.shields.io/badge/{repo._os}-passing-green.svg", )
