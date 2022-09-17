@@ -54,3 +54,7 @@ dkms.conf
 .vscode/*
 build/*
 bin/*
+
+shci/python/myrepo.txt
+shci/python/prerequisites.txt
+shci/python/build.txt
