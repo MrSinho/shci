@@ -116,7 +116,7 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
 
     push:str = f"git add --all && git commit -a -m \"shci status\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
     print(f"shci: {push}")
-    if (repo.push):
+    if (repo.push == True):
         os.system(push)
 
     shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
