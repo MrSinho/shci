@@ -163,7 +163,7 @@ def main():
 
     prerequisites = shci_read_text(prerequisites)
     print(f"shci: {prerequisites}")
-    os.system(prerequisites)
+    shci_call(prerequisites)
     
 
     build_script:str = shci_read_text(build_script)
