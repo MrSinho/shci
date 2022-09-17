@@ -6,6 +6,7 @@ import sys
 import platform
 import requests
 from requests import Response
+import time
 
 
 class shci_github_repo_info:
@@ -17,6 +18,7 @@ class shci_github_repo_info:
     push:bool
     _os:str
     markdown:str
+    start:float
 
     def __init__(self, _owner:str, _access_token:str, _repo_name:str, _recursive:bool, _dir:str, _push:bool):
         self.owner = _owner
@@ -25,6 +27,7 @@ class shci_github_repo_info:
         self.recursive = _recursive
         self.dir = _dir
         self.push = _push
+        self.start = time.time()
 
         _os:str = platform.system()
         if (_os == "Windows"):
@@ -40,13 +43,13 @@ class shci_github_repo_info:
 ## [{self._os} build logs:](https://github.com/mrsinho/shci)
 
         """#`build ran for` /// `calls`
-
+        self.bodies = ""
 
 
 def shci_call(repo:shci_github_repo_info, cmd:str) -> bool:
     r:_wrap_close = os.popen(cmd)
     output:str = r.read()
-    repo.markdown += f"""
+    repo.bodies += f"""
 ```bash
 {cmd}
 ```
@@ -118,6 +121,14 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
         clone_badge:Response = requests.get("https://img.shields.io/badge/{repo._os}-failure-red.svg", )
         badge_file.write(clone_badge.content)
 
+    end:float = time.time()
+    repo.markdown += f"""
+
+`build ran for {str(end - repo.start)}s`
+
+---
+"""
+    repo.markdown += repo.bodies
     shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
 
     push:str = f"cd {repo.dir} && git config user.name \"shci\" && git config user.email \"none\""
