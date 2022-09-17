@@ -151,6 +151,7 @@ def main():
     repo name: {repo_name},
     recursive flag: {str(recursive)},
     repo directory: {repo_dir}
+    push: {push}
     """)
 
     repo:shci_github_repo_info = shci_clone_github_repo(owner, access_token, repo_name, recursive, repo_dir, push)
