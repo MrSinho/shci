@@ -112,11 +112,11 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
     if (status == True):#success
         print("shci: Build success\n")
         clone_badge:Response = requests.get("https://img.shields.io/badge/{repo._os}-passing-green.svg", )
-        badge_file.write(clone_badge.content())
+        badge_file.write(clone_badge.content)
     else:
         print("shci: Build failure\n")
         clone_badge:Response = requests.get("https://img.shields.io/badge/{repo._os}-failure-red.svg", )
-        badge_file.write(clone_badge.content())
+        badge_file.write(clone_badge.content)
 
     shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
 
