@@ -124,7 +124,7 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
     end:float = time.time()
     repo.markdown += f"""
 
-`build ran for {str(end - repo.start)}s`
+`build ran for {".2f" % (end - repo.start)}s`
 
 ---
 """
