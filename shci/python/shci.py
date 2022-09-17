@@ -163,7 +163,7 @@ def main():
 
     prerequisites = shci_read_text(prerequisites)
     print(f"shci: {prerequisites}")
-    shci_call(prerequisites)
+    shci_call(repo, prerequisites)
     
 
     build_script:str = shci_read_text(build_script)
