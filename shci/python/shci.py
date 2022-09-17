@@ -66,6 +66,7 @@ def shci_call(repo:shci_github_repo_info, cmd:str) -> bool:
 def shci_write_text(path:str, text: str):
     file:TextIOWrapper = open(path, "w")
     file.write(text)
+    file.flush()
     file.close()
     return
 
@@ -92,7 +93,7 @@ def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive
     except Exception:
         print("shci: Script is running")
 
-    pull:str = f"cd {dir} && git stash && git pull"
+    pull:str = f"cd {dir} && git pull"
     print(f"shci: {pull}")
     os.system(pull)
 
@@ -114,12 +115,12 @@ def shci_build_status(repo:shci_github_repo_info, status:bool):
     print(f"shci: {clone_badge}")
     os.system(clone_badge)
 
-    push:str = f"git add --all && git commit -a -m \"shci status\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
+    shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
+
+    push:str = f"cd {repo.dir} && git add --all && git commit -a -m \"shci status\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
     if (repo.push == True):
         print(f"shci: {push}")
         os.system(push)
-
-    shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
 
     return
 
