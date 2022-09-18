@@ -99,7 +99,7 @@ def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive
     except Exception:
         print("shci: Script is running")
 
-    pull:str = f"cd {dir} && git pull"
+    pull:str = f"cd {dir} && git clean -df && git pull"
     print(f"shci: {pull}")
     os.system(pull)
 
