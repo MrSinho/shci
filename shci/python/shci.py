@@ -198,7 +198,7 @@ def main():
     build_script:str = shci_read_text(build_script)
 
     r:int = shci_call(repo, build_script)
-
+    print(f"EXIT CODE {r}")
     shci_build_status(repo, r)
 
     return
