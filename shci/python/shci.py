@@ -87,7 +87,13 @@ def shci_read_text(path: str) -> str:
 
 
 def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive:bool, dir:str, push:bool) -> shci_github_repo_info:
-    cmd:str = "";
+    
+    _os:str = platform.system()
+    if (_os == "Windows"):
+        cmd:str = f"rmdir -r {repo_name}/*";
+    else:
+        cmd:str = f"rmdir -rf {repo_name}/*";
+
     if (recursive == True):
         cmd += "git clone --recursive "
     else:
@@ -198,7 +204,7 @@ def main():
     build_script:str = shci_read_text(build_script)
 
     r:int = shci_call(repo, build_script)
-    print(f"EXIT CODE {r}")
+
     shci_build_status(repo, r)
 
     return
