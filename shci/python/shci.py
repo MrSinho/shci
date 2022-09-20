@@ -87,13 +87,7 @@ def shci_read_text(path: str) -> str:
 
 
 def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive:bool, dir:str, push:bool) -> shci_github_repo_info:
-    
-    _os:str = platform.system()
-    if (_os == "Windows"):
-        cmd:str = f"rmdir -r {repo_name} && ";
-    else:
-        cmd:str = f"rmdir -rf {repo_name} && ";
-
+    cmd:str = "";
     if (recursive == True):
         cmd += "git clone --recursive "
     else:
@@ -203,6 +197,7 @@ def main():
 
     build_script:str = shci_read_text(build_script)
 
+    os.system("cd gaia-archive-tools && git stash && git clean -df && git pull && git submodule update --init --recursive")
     r:int = shci_call(repo, build_script)
 
     shci_build_status(repo, r)
