@@ -38,7 +38,7 @@ class shci_github_repo_info:
         self.markdown = f"""
 # {_repo_name}
 
-![{self._os}-badge]({self._os}-status.svg)
+![{self._os}-badge]({self._os}-exit_code.svg)
 
 ## [{self._os} build logs:](https://github.com/mrsinho/shci)
 
@@ -46,7 +46,7 @@ class shci_github_repo_info:
         self.bodies = ""
 
 
-def shci_call(repo:shci_github_repo_info, cmd:str) -> bool:
+def shci_call(repo:shci_github_repo_info, cmd:str) -> int:
     r:_wrap_close = os.popen(cmd)
     output:str = r.read()
     repo.bodies += f"""
@@ -65,7 +65,7 @@ def shci_call(repo:shci_github_repo_info, cmd:str) -> bool:
     print(f"shci call: {cmd}\nshci call output: {output}")
 
     r._stream.close()
-    exit_code = r._proc.wait()
+    exit_code:int = r._proc.wait()
 
     return exit_code
 
@@ -106,13 +106,13 @@ def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive
     repo:shci_github_repo_info = shci_github_repo_info(owner, access_token, repo_name, recursive, dir, push)
     return repo
 
-def shci_build_status(repo:shci_github_repo_info, status:bool):
+def shci_build_status(repo:shci_github_repo_info, exit_code:int):
     setup_log_dir:str = f"cd {repo.dir} && mkdir .shci" 
     print(f"shci: {setup_log_dir}")
     os.system(setup_log_dir)
 
-    badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}-status.svg", "wb")
-    if (status == True):#success
+    badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}-exit_code.svg", "wb")
+    if (exit_code == 0):#success
         print("shci: Build success\n")
         clone_badge:Response = requests.get(f"https://img.shields.io/badge/{repo._os}-passing-green.svg")
         badge_file.write(clone_badge.content)
@@ -131,10 +131,19 @@ Build ran for `{str("%.2f" % (end - repo.start))}s`
 ---
 """
     repo.markdown += repo.bodies
+    repo.markdown += f"""
+
+---
+
+Build terminated with exit code {exit_code}
+
+---
+
+"""
     shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
 
     push:str = f"cd {repo.dir} && git config user.name \"shci\" && git config user.email \"none\""
-    push += f" && cd {repo.dir} && git add --all && git commit -a -m \"shci status\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
+    push += f" && cd {repo.dir} && git add --all && git commit -a -m \"shci exit_code\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
     if (repo.push == True):
         print(f"shci: {push}")
         os.system(push)
@@ -184,14 +193,11 @@ def main():
     
 
     build_script:str = shci_read_text(build_script)
-    build_arr = build_script.split('\n')
+    build_script = build_script.replace("\n", "&&")
 
-    r:bool = True
-    for call_idx in range (0, len(build_arr), 1):
-        r = r and (shci_call(repo, build_arr[call_idx]) == 0)
+    r:int = shci_call(repo, build_script) == 0
 
     shci_build_status(repo, r)
-
 
     return
 
