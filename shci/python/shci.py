@@ -193,7 +193,7 @@ def main():
     
 
     build_script:str = shci_read_text(build_script)
-    build_script = build_script.replace("\n", "&&")
+    build_script = build_script.replace("\n", " && ")
 
     r:int = shci_call(repo, build_script)
 
