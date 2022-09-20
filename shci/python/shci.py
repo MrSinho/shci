@@ -195,7 +195,7 @@ def main():
     build_script:str = shci_read_text(build_script)
     build_script = build_script.replace("\n", "&&")
 
-    r:int = shci_call(repo, build_script) == 0
+    r:int = shci_call(repo, build_script)
 
     shci_build_status(repo, r)
 
