@@ -47,7 +47,10 @@ class shci_github_repo_info:
 
 
 def shci_call(repo:shci_github_repo_info, cmd:str) -> int:
-    r:_wrap_close = os.popen(cmd)
+
+    build_script = cmd.replace("\n", " && ")
+
+    r:_wrap_close = os.popen(build_script)
     output:str = r.read()
     repo.bodies += f"""
 ```bash
@@ -193,7 +196,6 @@ def main():
     
 
     build_script:str = shci_read_text(build_script)
-    build_script = build_script.replace("\n", " && ")
 
     r:int = shci_call(repo, build_script)
 
