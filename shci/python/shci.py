@@ -102,7 +102,7 @@ def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive
     except Exception:
         print("shci: Script is running")
 
-    pull:str = f"cd {dir} && git clean -df && git pull"
+    pull:str = f"cd {dir} && git reset --hard && git pull && git submodule update --init --recursive"
     print(f"shci: {pull}")
     os.system(pull)
 
@@ -197,7 +197,6 @@ def main():
 
     build_script:str = shci_read_text(build_script)
 
-    os.system("cd gaia-archive-tools && git stash && git clean -df && git pull && git submodule update --init --recursive")
     r:int = shci_call(repo, build_script)
 
     shci_build_status(repo, r)
