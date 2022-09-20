@@ -90,9 +90,9 @@ def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive
     
     _os:str = platform.system()
     if (_os == "Windows"):
-        cmd:str = f"rmdir -r {repo_name}/*";
+        cmd:str = f"rmdir -r {repo_name}/* && ";
     else:
-        cmd:str = f"rmdir -rf {repo_name}/*";
+        cmd:str = f"rmdir -rf {repo_name}/* && ";
 
     if (recursive == True):
         cmd += "git clone --recursive "
