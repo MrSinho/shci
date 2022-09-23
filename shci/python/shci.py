@@ -136,8 +136,6 @@ Build ran for `{str("%.2f" % (end - repo.start))}s`
     repo.markdown += repo.bodies
     repo.markdown += f"""
 
----
-
 Build terminated with exit code {exit_code}
 
 ---
