@@ -1,57 +1,85 @@
-from asyncio import base_futures
-from io import TextIOWrapper
+import io
 import os
-from os import _wrap_close
 import sys
 import platform
 import requests
-from requests import Response
 import time
+
+from io import TextIOWrapper
+from os import _wrap_close
+from requests import Response
+from subprocess import *
 
 
 class shci_github_repo_info:
-    owner:str
-    access_token:str
-    repo_name:str
-    recursive:bool
-    dir:str
-    push:bool
-    _os:str
-    markdown:str
-    start:float
+    owner:str        = ""
+    access_token:str = ""
+    repo_name:str    = ""
+    recursive:bool   = True
+    dir:str          = ""
+    push:bool        = True
+    _os:str          = ""
+    markdown:str     = ""
+    start:float      = 0.0
 
-    def __init__(self, _owner:str, _access_token:str, _repo_name:str, _recursive:bool, _dir:str, _push:bool):
-        self.owner = _owner
-        self.access_token = _access_token
-        self.repo_name = _repo_name
-        self.recursive = _recursive
-        self.dir = _dir
-        self.push = _push
+    prerequisites_file:str        = ""
+    prerequisites_output_file:str = ""
+    
+    build_file:str        = ""
+    build_output_file:str = ""
+
+    bodies:str            = ""
+
+    def __init__(self):
         self.start = time.time()
-
         _os:str = platform.system()
         if (_os == "Windows"):
             self._os = "windows"
         else:
             self._os = "linux"
 
-        self.markdown = f"""
-# {_repo_name}
+def shci_read_arg(arg:str, repo:shci_github_repo_info):
+    if (arg.startswith("owner=")):
+        repo.owner = arg.removeprefix("owner=")
+    elif (arg.startswith("access_token=")):
+        repo.access_token = arg.removeprefix("access_token=")
+    elif (arg.startswith("repo_name=")):
+        repo.repo_name = arg.removeprefix("repo_name=")
+    elif (arg.startswith("recursive=")):
+        repo.recursive = bool(arg.removeprefix("recursive="))
+    elif (arg.startswith("repo_dir=")):
+        repo.dir = arg.removeprefix("repo_dir=")
+    elif (arg.startswith("push=")):
+        repo.push = bool(arg.removeprefix("push="))
+    elif (arg.startswith("prerequisites=")):
+        repo.prerequisites_file = arg.removeprefix("prerequisites=")
+    elif (arg.startswith("prerequisites_output=")):
+        repo.prerequisites_output_file = arg.removeprefix("prerequisites_output=")
+    elif (arg.startswith("build=")):
+        repo.build_file = arg.removeprefix("build=")
+    elif (arg.startswith("build_output=")):
+        repo.build_output_file = arg.removeprefix("build_output=")
 
-![{self._os}-badge]({self._os}-exit_code.svg)
 
-## [{self._os} build logs:](https://github.com/mrsinho/shci)
+def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> int:
 
-        """#`build ran for` /// `calls`
-        self.bodies = ""
+    build_script:str = ""
 
-
-def shci_call(repo:shci_github_repo_info, cmd:str) -> int:
-
-    build_script = cmd.replace("\n", " && ")
-
+    if (repo._os == "windows"):
+        build_script = f"call {command_file}"
+    else:
+        build_script = f"sudo bash {command_file}"
+        
+    print(f"shci executing: {build_script}")
     r:_wrap_close = os.popen(build_script)
-    output:str = r.read()
+    exit_code:int = r._proc.wait()
+
+    cmd:str = shci_read_text(command_file)
+    output:str = shci_read_text(output_file)
+
+    print(f"shci call command: {cmd}")
+    print(f"shci call command output: {output}")
+
     repo.bodies += f"""
 ```bash
 {cmd}
@@ -64,11 +92,6 @@ def shci_call(repo:shci_github_repo_info, cmd:str) -> int:
 ---
 
     """
-
-    print(f"shci call: {cmd}\nshci call output: {output}")
-
-    r._stream.close()
-    exit_code:int = r._proc.wait()
 
     return exit_code
 
@@ -86,34 +109,56 @@ def shci_read_text(path: str) -> str:
     return data
 
 
-def shci_clone_github_repo(owner:str, access_token:str, repo_name:str, recursive:bool, dir:str, push:bool) -> shci_github_repo_info:
-    cmd:str = "";
-    if (recursive == True):
+def shci_clone_github_repo(repo:shci_github_repo_info):
+    repo.markdown = f"""
+# {repo.repo_name}
+
+![{repo._os}-badge]({repo._os}-exit_code.svg)
+
+## [{repo._os} build logs:](https://github.com/mrsinho/shci)
+
+"""#`build ran for` /// `calls`
+
+
+    print(f"""shci:
+    owner: {repo.owner},
+    repo name: {repo.repo_name},
+    recursive flag: {str(repo.recursive)},
+    repo directory: {repo.dir},
+    push: {repo.push},
+    prerequisites file: {repo.prerequisites_file},
+    prerequisites output file: {repo.prerequisites_output_file},
+    build file: {repo.build_file},
+    build output file: {repo.build_output_file}
+    """)
+
+
+    cmd:str = ""
+    if (repo.recursive == True):
         cmd += "git clone --recursive "
     else:
         cmd += "git clone "
 
-    cmd += f"https://{access_token}@github.com/{owner}/{repo_name} {dir}"
+    cmd += f"https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name} {repo.dir}"
     
-    print(f"shci: {cmd}\n")
+    print(f"shci cloning repo: {cmd}\n")
 
     try:
         os.system(cmd)
     except Exception:
         print("shci: Script is running")
 
-    pull:str = f"cd {dir} && git clean -df && git pull && git submodule update --init --recursive"
+    pull:str = f"cd {repo.dir} && git clean -df && git pull && git submodule update --init --recursive"
     print(f"shci: {pull}")
     os.system(pull)
 
-    repo:shci_github_repo_info = shci_github_repo_info(owner, access_token, repo_name, recursive, dir, push)
-    return repo
+    return
 
 def shci_build_status(repo:shci_github_repo_info, exit_code:int):
     setup_log_dir:str = f"cd {repo.dir} && mkdir .shci" 
     print(f"shci: {setup_log_dir}")
     os.system(setup_log_dir)
-
+    print(f"shci repo dir: {repo.dir}")
     badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}-exit_code.svg", "wb")
     if (exit_code == 0):#success
         print("shci: Build success\n")
@@ -143,8 +188,8 @@ Build terminated with exit code {exit_code}
 """
     shci_write_text(f"{repo.dir}/.shci/{repo._os}-log.md", repo.markdown)
 
-    push:str = f"cd {repo.dir} && git config user.name \"shci\" && git config user.email \"none\""
-    push += f" && cd {repo.dir} && git add --all && git commit -a -m \"shci exit_code\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
+    push:str = f"dir && cd {repo.dir} && git config user.name \"shci\" && git config user.email \"none\""
+    push += f" && git add --all && git commit -a -m \"shci exit_code\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
     if (repo.push == True):
         print(f"shci: {push}")
         os.system(push)
@@ -152,50 +197,16 @@ Build terminated with exit code {exit_code}
     return
 
 def main():
-    #example call: python shci.py ../../settings.txt
-    args = []
 
-    if (len(sys.argv) == 2):
-        path:str = sys.argv[1]#script path
-        args = shci_read_text(path).split()
-    
-    else:
-        print("shci: Called shci.py with wrong arguments\n")
-        return
+    repo:shci_github_repo_info = shci_github_repo_info()
 
-    owner:str = args[0]
-    access_token:str = args[1]
-    repo_name:str = args[2]
-    recursive:bool = bool(args[3])
-    repo_dir:str = args[4]
-    push:bool = bool(args[5] == "True" or args[5] == "1")
+    for i in range (0, len(sys.argv), 1):
+        shci_read_arg(str(sys.argv[i]), repo)
 
-    print(f"shci: {args}")
-    if (len(args) < 8):
-        print("shci: Missing repository data")
-        return
+    shci_clone_github_repo(repo)
 
-    print(f"""shci:
-    owner: {owner},
-    repo name: {repo_name},
-    recursive flag: {str(recursive)},
-    repo directory: {repo_dir}
-    push: {push}
-    """)
-
-    repo:shci_github_repo_info = shci_clone_github_repo(owner, access_token, repo_name, recursive, repo_dir, push)
-
-    prerequisites:str = args[6]#batch or shell file, depends on the current system
-    build_script:str = args[7]
-
-    prerequisites = shci_read_text(prerequisites)
-    print(f"shci: {prerequisites}")
-    shci_call(repo, prerequisites)
-    
-
-    build_script:str = shci_read_text(build_script)
-
-    r:int = shci_call(repo, build_script)
+    shci_call(repo, repo.prerequisites_file, repo.prerequisites_output_file)
+    r:int = shci_call(repo, repo.build_file, repo.build_output_file)
 
     shci_build_status(repo, r)
 
