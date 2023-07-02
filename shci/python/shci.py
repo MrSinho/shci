@@ -77,9 +77,9 @@ def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> 
     build_script:str = ""
 
     if (repo._os == "windows"):
-        build_script = f"call {command_file}"
+        build_script = f"call {repo.dir}/{command_file}"
     else:
-        build_script = f"sudo bash {command_file}"
+        build_script = f"sudo bash {repo.dir}/{command_file}"
         
     print(f"shci executing: {build_script}")
     r:_wrap_close = os.popen(build_script)
