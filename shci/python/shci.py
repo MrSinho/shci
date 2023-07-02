@@ -189,7 +189,7 @@ Build terminated with exit code {exit_code}
 """
     shci_write_text(f"{repo.dir}/.shci/{repo._os}/log.md", repo.markdown)
 
-    push:str = f"dir && cd {repo.dir} && git config user.name \"shci\" && git config user.email \"none\""
+    push:str = f"dir && cd {repo.dir}"
     push += f" && git add --all && git commit -a -m \"shci exit_code\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
     if (repo.push == True):
         print(f"shci: {push}")
