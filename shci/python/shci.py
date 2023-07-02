@@ -159,9 +159,6 @@ def shci_pull_repo(repo:shci_github_repo_info):
     return
 
 def shci_build_status(repo:shci_github_repo_info, exit_code:int):
-    setup_log_dir:str = f"cd {repo.dir} && mkdir .shci" 
-    print(f"shci: {setup_log_dir}")
-    os.system(setup_log_dir)
     print(f"shci repo dir: {repo.dir}")
     badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}/exit_code.svg", "wb")
     if (exit_code == 0):#success
