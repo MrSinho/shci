@@ -85,8 +85,8 @@ def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> 
     r:_wrap_close = os.popen(build_script)
     exit_code:int = r._proc.wait()
 
-    cmd:str = shci_read_text(command_file)
-    output:str = shci_read_text(output_file)
+    cmd:str = shci_read_text(f"{repo.dir}/{command_file}")
+    output:str = shci_read_text(f"{repo.dir}/{output_file}")
 
     print(f"shci call command: {cmd}")
     print(f"shci call command output: {output}")
