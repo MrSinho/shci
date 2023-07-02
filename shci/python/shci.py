@@ -59,7 +59,18 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
         repo.build_file = arg.removeprefix("build=")
     elif (arg.startswith("build_output=")):
         repo.build_output_file = arg.removeprefix("build_output=")
+    return
 
+def shci_markdown_setup(repo:shci_github_repo_info):
+    repo.markdown = f"""
+# {repo.repo_name}
+
+![{repo._os}-badge]({repo._os}-exit_code.svg)
+
+## [{repo._os} build logs:](https://github.com/mrsinho/shci)
+
+"""#`build ran for` /// `calls`
+    return
 
 def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> int:
 
@@ -110,16 +121,7 @@ def shci_read_text(path: str) -> str:
 
 
 def shci_clone_github_repo(repo:shci_github_repo_info):
-    repo.markdown = f"""
-# {repo.repo_name}
-
-![{repo._os}-badge]({repo._os}-exit_code.svg)
-
-## [{repo._os} build logs:](https://github.com/mrsinho/shci)
-
-"""#`build ran for` /// `calls`
-
-
+    
     print(f"""shci:
     owner: {repo.owner},
     repo name: {repo.repo_name},
@@ -148,10 +150,12 @@ def shci_clone_github_repo(repo:shci_github_repo_info):
     except Exception:
         print("shci: Script is running")
 
+    return
+
+def shci_pull_repo(repo:shci_github_repo_info):
     pull:str = f"cd {repo.dir} && git clean -df && git pull && git submodule update --init --recursive"
     print(f"shci: {pull}")
     os.system(pull)
-
     return
 
 def shci_build_status(repo:shci_github_repo_info, exit_code:int):
@@ -203,7 +207,11 @@ def main():
     for i in range (0, len(sys.argv), 1):
         shci_read_arg(str(sys.argv[i]), repo)
 
-    shci_clone_github_repo(repo)
+    shci_markdown_setup(repo)
+
+    #shci_clone_github_repo(repo)
+
+    shci_pull_repo(repo)
 
     shci_call(repo, repo.prerequisites_file, repo.prerequisites_output_file)
     r:int = shci_call(repo, repo.build_file, repo.build_output_file)
