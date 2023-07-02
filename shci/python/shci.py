@@ -65,7 +65,7 @@ def shci_markdown_setup(repo:shci_github_repo_info):
     repo.markdown = f"""
 # {repo.repo_name}
 
-![{repo._os}-badge]({repo._os}-exit_code.svg)
+![{repo._os}-badge](exit_code.svg)
 
 ## [{repo._os} build logs:](https://github.com/mrsinho/shci)
 
