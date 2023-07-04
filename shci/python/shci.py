@@ -83,8 +83,8 @@ system        : {platform.system()}
 version       : {platform.version()}
 platform      : {platform.platform()}
 processor     : {str(platform.processor())}
-min frequency : {str(psutil.cpu_freq().min)} Mhz
-max frequency : {str(psutil.cpu_freq().max)} Mhz
+min frequency : {str(psutil.cpu_freq().min)} MHz
+max frequency : {str(psutil.cpu_freq().max)} MHz
 cores         : {str(psutil.cpu_count(logical=False))}
 """
 
@@ -191,17 +191,13 @@ def shci_build_status(repo:shci_github_repo_info, exit_code:int):
     badge_file.close()
 
     end:float = time.time()
-    repo.markdown += f"""
-
-build ran for `{str("%.2f" % (end - repo.start))}s`
-build terminated with exit code `{exit_code}`
+    repo.markdown += f"""build ran for `{str("%.2f" % (end - repo.start))} s` and terminated with exit code `{exit_code}`
 
 ---
 """
     repo.markdown += repo.bodies
     repo.markdown += f"""
-
-build terminated with exit code `{exit_code}`
+build ran for `{str("%.2f" % (end - repo.start))} s` and terminated with exit code `{exit_code}`
 
 ---
 
