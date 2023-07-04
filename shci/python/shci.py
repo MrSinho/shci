@@ -82,7 +82,6 @@ def shci_markdown_setup(repo:shci_github_repo_info):
 system        : {platform.system()}
 version       : {platform.version()}
 platform      : {platform.platform()}
-machine       : {platform.machine()}
 processor     : {str(platform.processor())}
 min frequency : {str(psutil.cpu_freq().min)} Mhz
 max frequency : {str(psutil.cpu_freq().max)} Mhz
