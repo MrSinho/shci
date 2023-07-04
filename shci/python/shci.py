@@ -6,7 +6,6 @@ import requests
 import time
 import chardet
 import psutil
-import cpufreq
 
 from io import TextIOWrapper
 from os import _wrap_close
@@ -81,9 +80,9 @@ def shci_markdown_setup(repo:shci_github_repo_info):
     uname = platform.uname()
     
     cpu_info:str = f"""System:     {uname.system}
-Processor:  {uname.processor}
-Core count: {psutil.cpu_count(logical=False)}
-Max freq:   {cpufreq.max:.2f} Mhz"""
+Processor:  {str(uname.processor)}
+Core count: {str(psutil.cpu_count(logical=False))}
+Max freq:   {str(psutil.cpu_freq().max)} Mhz"""
 
     print(f"shci cpu info: {cpu_info}")
     
