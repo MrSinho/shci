@@ -40,6 +40,19 @@ class shci_github_repo_info:
         else:
             self._os = "linux"
 
+def shci_write_text(path:str, text: str):
+    file:TextIOWrapper = open(path, "w")
+    file.write(text)
+    file.flush()
+    file.close()
+    return
+
+def shci_read_text(path: str) -> str:
+    file:TextIOWrapper = open(path, "r")
+    data:str = str(file.read())
+    file.close()
+    return data
+
 def shci_read_arg(arg:str, repo:shci_github_repo_info):
     if (arg.startswith("owner=")):
         repo.owner = arg.removeprefix("owner=")
@@ -130,19 +143,6 @@ def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> 
     """
 
     return exit_code
-
-def shci_write_text(path:str, text: str):
-    file:TextIOWrapper = open(path, "w")
-    file.write(text)
-    file.flush()
-    file.close()
-    return
-
-def shci_read_text(path: str) -> str:
-    file:TextIOWrapper = open(path, "r")
-    data:str = str(file.read())
-    file.close()
-    return data
 
 def shci_print_info(repo:shci_github_repo_info):
     
