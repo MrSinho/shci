@@ -48,7 +48,7 @@ def shci_write_text(path:str, text: str):
     return
 
 def shci_read_text(path: str) -> str:
-    file:TextIOWrapper = open(path, "r", encoding="utf-8-sig")
+    file:TextIOWrapper = open(path, "r", encoding="utf-8-sig", errors="ignore")
     data:str = str(file.read())
     file.close()
     return data
