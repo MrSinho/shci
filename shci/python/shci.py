@@ -68,9 +68,9 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
 def shci_markdown_setup(repo:shci_github_repo_info, cpu_info_output_file:str):
     cpu_info_cmd:str = ""
     if (repo._os == "windows"):
-        cpu_info_cmd = f"cd {repo.dir} && wmic cpu get caption,name,numberofcores,maxclockspeed > {cpu_info_output_file}"
+        cpu_info_cmd = f"wmic cpu get caption,name,numberofcores,maxclockspeed > {repo.dir}/{cpu_info_output_file}"
     else:
-        cpu_info_cmd = f"cd {repo.dir} && cat /proc/cpuinfo | grep \"vendor_id\" | uniq && cat /proc/cpuinfo | grep \"model name\" | uniq && cat /proc/cpuinfo | grep \"cpu MHz\" | uniq && cat /proc/cpuinfo | grep \"siblings\" | uniq > {cpu_info_output_file}"
+        cpu_info_cmd = f"cat /proc/cpuinfo | grep \"vendor_id\" | uniq && cat /proc/cpuinfo | grep \"model name\" | uniq && cat /proc/cpuinfo | grep \"cpu MHz\" | uniq && cat /proc/cpuinfo | grep \"siblings\" | uniq > {repo.dir}/{cpu_info_output_file}"
 
     print(f"shci cpu info command: {cpu_info_cmd}\n")
     
