@@ -4,6 +4,7 @@ import sys
 import platform
 import requests
 import time
+import chardet
 
 from io import TextIOWrapper
 from os import _wrap_close
@@ -48,8 +49,8 @@ def shci_write_text(path:str, text: str):
     return
 
 def shci_read_text(path: str) -> str:
-    file:TextIOWrapper = open(path, "r", encoding="utf-16", errors="ignore")
-    data:str = str(file.read())
+    file:TextIOWrapper = open(path, "r")
+    data:str = str(chardet.detect(file.read()))
     file.close()
     return data
 
