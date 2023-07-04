@@ -226,14 +226,13 @@ def main():
 
     repo:shci_github_repo_info = shci_github_repo_info()
 
+    #shci_clone_github_repo(repo)
     for i in range (0, len(sys.argv), 1):
         shci_read_arg(str(sys.argv[i]), repo)
 
-    shci_markdown_setup(repo, repo.cpu_info_output_file)
-
-    #shci_clone_github_repo(repo)
-
     shci_pull_repo(repo)
+    
+    shci_markdown_setup(repo, repo.cpu_info_output_file)
 
     shci_call(repo, repo.prerequisites_file, repo.prerequisites_output_file)
     r:int = shci_call(repo, repo.build_file, repo.build_output_file)
