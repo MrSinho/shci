@@ -78,10 +78,16 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
 def shci_markdown_setup(repo:shci_github_repo_info):
     uname = platform.uname()
     
-    cpu_info:str = f"""System:     {uname.system}
-Processor     : {str(uname.processor)}
-Cores         : {str(psutil.cpu_count(logical=False))}
-Max frequency : {str(psutil.cpu_freq().max)} Mhz"""
+    cpu_info:str = f"""
+system        : {platform.system()}
+version       : {platform.version()}
+platform      : {platform.platform()}
+machine       : {platform.machine()}
+processor     : {str(platform.processor())}
+min frequency : {str(psutil.cpu_freq().min)} Mhz
+max frequency : {str(psutil.cpu_freq().max)} Mhz
+cores         : {str(psutil.cpu_count(logical=False))}
+"""
 
     print(f"shci cpu info: {cpu_info}")
     
