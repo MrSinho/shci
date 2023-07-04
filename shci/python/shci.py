@@ -48,7 +48,7 @@ def shci_write_text(path:str, text: str):
     return
 
 def shci_read_text(path: str) -> str:
-    file:TextIOWrapper = open(path, "rb")
+    file:TextIOWrapper = open(path, "r")
     data:str = str(file.read())
     file.close()
     return data
@@ -81,7 +81,7 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
 def shci_markdown_setup(repo:shci_github_repo_info, cpu_info_output_file:str):
     cpu_info_cmd:str = ""
     if (repo._os == "windows"):
-        cpu_info_cmd = f"wmic cpu get caption,name,numberofcores,maxclockspeed > {repo.dir}/{cpu_info_output_file}"
+        cpu_info_cmd = f"> {repo.dir}/{cpu_info_output_file} ( wmic cpu get caption,name,numberofcores,maxclockspeed )"
     else:
         cpu_info_cmd = f"cat /proc/cpuinfo | grep \"vendor_id\" | uniq && cat /proc/cpuinfo | grep \"model name\" | uniq && cat /proc/cpuinfo | grep \"cpu MHz\" | uniq && cat /proc/cpuinfo | grep \"siblings\" | uniq > {repo.dir}/{cpu_info_output_file}"
 
