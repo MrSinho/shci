@@ -61,13 +61,32 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
         repo.build_output_file = arg.removeprefix("build_output=")
     return
 
-def shci_markdown_setup(repo:shci_github_repo_info):
+def shci_markdown_setup(repo:shci_github_repo_info, cpu_info_output_file:str):
+    cpu_info_cmd:str = ""
+    if (repo._os == "windows"):
+        cpu_info_cmd = "wmic cpu get caption,name,numberofcores,maxclockspeed"
+    else:
+        cpu_info_cmd = "cat /proc/cpuinfo | grep \"vendor_id\" | uniq && cat /proc/cpuinfo | grep \"model name\" | uniq && cat /proc/cpuinfo | grep \"cpu MHz\" | uniq && cat /proc/cpuinfo | grep \"siblings\" | uniq"
+        
+    r:_wrap_close = os.popen(build_script)
+    r._proc.wait()
+
+    cpu_info:str = shci_read_text(f"{repo.dir}/{cpu_info_output_file}")
+    
     repo.markdown = f"""
 # {repo.repo_name}
 
 ![{repo._os}-badge](exit_code.svg)
 
 ## [{repo._os} build logs:](https://github.com/mrsinho/shci)
+
+```
+{cpu_info}
+```
+
+```
+
+```
 
 """#`build ran for` /// `calls`
     return
