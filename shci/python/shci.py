@@ -4,7 +4,6 @@ import sys
 import platform
 import requests
 import time
-import chardet
 import psutil
 
 from io import TextIOWrapper
@@ -49,7 +48,7 @@ def shci_write_text(path:str, text: str):
 
 def shci_read_text(path: str) -> str:
     file:TextIOWrapper = open(path, "r")
-    data:str = str(chardet.detect(file.read()))
+    data:str = str(file.read())
     file.close()
     return data
 
@@ -80,9 +79,9 @@ def shci_markdown_setup(repo:shci_github_repo_info):
     uname = platform.uname()
     
     cpu_info:str = f"""System:     {uname.system}
-Processor:  {str(uname.processor)}
-Core count: {str(psutil.cpu_count(logical=False))}
-Max freq:   {str(psutil.cpu_freq().max)} Mhz"""
+Processor     : {str(uname.processor)}
+Cores         : {str(psutil.cpu_count(logical=False))}
+Max frequency : {str(psutil.cpu_freq().max)} Mhz"""
 
     print(f"shci cpu info: {cpu_info}")
     
