@@ -22,6 +22,8 @@ class shci_github_repo_info:
     markdown:str     = ""
     start:float      = 0.0
 
+    cpu_info_output_file = ""
+    
     prerequisites_file:str        = ""
     prerequisites_output_file:str = ""
     
@@ -51,6 +53,8 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
         repo.dir = arg.removeprefix("repo_dir=")
     elif (arg.startswith("push=")):
         repo.push = bool(arg.removeprefix("push="))
+    elif (arg.startswith("cpu_info_output=")):
+        repo.cpu_info_output_file = arg.removeprefix("cpu_info_output=")
     elif (arg.startswith("prerequisites=")):
         repo.prerequisites_file = arg.removeprefix("prerequisites=")
     elif (arg.startswith("prerequisites_output=")):
@@ -223,7 +227,7 @@ def main():
     for i in range (0, len(sys.argv), 1):
         shci_read_arg(str(sys.argv[i]), repo)
 
-    shci_markdown_setup(repo)
+    shci_markdown_setup(repo, repo.cpu_info_output_file)
 
     #shci_clone_github_repo(repo)
 
