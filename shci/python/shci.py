@@ -5,6 +5,7 @@ import platform
 import requests
 import time
 import chardet
+import psutil
 
 from io import TextIOWrapper
 from os import _wrap_close
@@ -23,8 +24,6 @@ class shci_github_repo_info:
     markdown:str     = ""
     start:float      = 0.0
 
-    cpu_info_output_file = ""
-    
     prerequisites_file:str        = ""
     prerequisites_output_file:str = ""
     
@@ -67,8 +66,6 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
         repo.dir = arg.removeprefix("repo_dir=")
     elif (arg.startswith("push=")):
         repo.push = bool(arg.removeprefix("push="))
-    elif (arg.startswith("cpu_info_output=")):
-        repo.cpu_info_output_file = arg.removeprefix("cpu_info_output=")
     elif (arg.startswith("prerequisites=")):
         repo.prerequisites_file = arg.removeprefix("prerequisites=")
     elif (arg.startswith("prerequisites_output=")):
@@ -79,20 +76,15 @@ def shci_read_arg(arg:str, repo:shci_github_repo_info):
         repo.build_output_file = arg.removeprefix("build_output=")
     return
 
-def shci_markdown_setup(repo:shci_github_repo_info, cpu_info_output_file:str):
-    cpu_info_cmd:str = ""
-    if (repo._os == "windows"):
-        cpu_info_cmd = f"> {repo.dir}/{cpu_info_output_file} ( wmic cpu get caption,name,numberofcores,maxclockspeed )"
-    else:
-        cpu_info_cmd = f"cat /proc/cpuinfo | grep \"vendor_id\" | uniq && cat /proc/cpuinfo | grep \"model name\" | uniq && cat /proc/cpuinfo | grep \"cpu MHz\" | uniq && cat /proc/cpuinfo | grep \"siblings\" | uniq > {repo.dir}/{cpu_info_output_file}"
-
-    print(f"shci cpu info command: {cpu_info_cmd}\n")
+def shci_markdown_setup(repo:shci_github_repo_info):
+    uname = platform.uname()
     
-    r:_wrap_close = os.popen(cpu_info_cmd)
-    r._proc.wait()
+    cpu_info:str = f"""System:     {uname.system}
+Processor:  {uname.processor}
+Core count: {psutil.cpu_count(logical=False)}
+Max freq:   {cpufreq.max:.2f} Mhz}"""
 
-    cpu_info:str = shci_read_text(f"{repo.dir}/{cpu_info_output_file}")
-    print(f"shci cpu info:\n{cpu_info}\n")
+    print(f"shci cpu info: {cpu_info}")
     
     repo.markdown = f"""
 # {repo.repo_name}
@@ -239,7 +231,7 @@ def main():
     
     shci_pull_repo(repo)
     
-    shci_markdown_setup(repo, repo.cpu_info_output_file)
+    shci_markdown_setup(repo)
 
     shci_call(repo, repo.prerequisites_file, repo.prerequisites_output_file)
     r:int = shci_call(repo, repo.build_file, repo.build_output_file)
