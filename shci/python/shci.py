@@ -6,6 +6,7 @@ import requests
 import time
 import chardet
 import psutil
+import cpufreq
 
 from io import TextIOWrapper
 from os import _wrap_close
