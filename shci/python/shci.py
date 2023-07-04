@@ -72,7 +72,7 @@ def shci_markdown_setup(repo:shci_github_repo_info, cpu_info_output_file:str):
     else:
         cpu_info_cmd = "cat /proc/cpuinfo | grep \"vendor_id\" | uniq && cat /proc/cpuinfo | grep \"model name\" | uniq && cat /proc/cpuinfo | grep \"cpu MHz\" | uniq && cat /proc/cpuinfo | grep \"siblings\" | uniq"
         
-    r:_wrap_close = os.popen(build_script)
+    r:_wrap_close = os.popen(cpu_info_cmd)
     r._proc.wait()
 
     cpu_info:str = shci_read_text(f"{repo.dir}/{cpu_info_output_file}")
