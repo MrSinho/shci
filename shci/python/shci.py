@@ -97,13 +97,7 @@ cores         : {str(psutil.cpu_count(logical=False))}
 
 ## [{repo._os} build logs:](https://github.com/mrsinho/shci)
 
-```
-{cpu_info}
-```
-
-```
-
-```
+```{cpu_info}```
 
 """#`build ran for` /// `calls`
     return
