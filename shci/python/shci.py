@@ -131,7 +131,6 @@ def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> 
 ```
 
 ---
-
     """
 
     return exit_code
@@ -194,14 +193,15 @@ def shci_build_status(repo:shci_github_repo_info, exit_code:int):
     end:float = time.time()
     repo.markdown += f"""
 
-Build ran for `{str("%.2f" % (end - repo.start))}s`
+build ran for `{str("%.2f" % (end - repo.start))}s`
+build terminated with exit code `{exit_code}`
 
 ---
 """
     repo.markdown += repo.bodies
     repo.markdown += f"""
 
-Build terminated with exit code {exit_code}
+build terminated with exit code `{exit_code}`
 
 ---
 
