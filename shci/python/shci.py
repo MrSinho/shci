@@ -91,6 +91,7 @@ def shci_markdown_setup(repo:shci_github_repo_info, cpu_info_output_file:str):
     r._proc.wait()
 
     cpu_info:str = shci_read_text(f"{repo.dir}/{cpu_info_output_file}")
+    print(f"shci cpu info:\n{cpu_info}\n")
     
     repo.markdown = f"""
 # {repo.repo_name}
