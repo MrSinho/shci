@@ -82,7 +82,7 @@ def shci_markdown_setup(repo:shci_github_repo_info):
     cpu_info:str = f"""System:     {uname.system}
 Processor:  {uname.processor}
 Core count: {psutil.cpu_count(logical=False)}
-Max freq:   {cpufreq.max:.2f} Mhz}"""
+Max freq:   {cpufreq.max:.2f} Mhz"""
 
     print(f"shci cpu info: {cpu_info}")
     
