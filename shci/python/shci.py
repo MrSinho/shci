@@ -204,11 +204,11 @@ build ran for `{str("%.2f" % (end - repo.start))} s` and terminated with exit co
 """
     shci_write_text(f"{repo.dir}/.shci/{repo._os}/log.md", repo.markdown)
 
-    push:str = f"dir && cd {repo.dir}"
-    push += f" && git add --all && git commit -a -m \"shci exit_code\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
-    if (repo.push == True):
-        print(f"shci: {push}")
-        os.system(push)
+    #push:str = f"dir && cd {repo.dir}"
+    #push += f" && git add --all && git commit -a -m \"shci exit_code\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
+    #if (repo.push == True):
+    #    print(f"shci: {push}")
+    #    os.system(push)
 
     return
 
