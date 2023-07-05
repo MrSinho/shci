@@ -222,7 +222,7 @@ def main():
 
     shci_print_info(repo)
     
-    shci_pull_repo(repo)
+    #shci_pull_repo(repo)
     
     shci_markdown_setup(repo)
 
