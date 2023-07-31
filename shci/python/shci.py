@@ -14,11 +14,8 @@ from subprocess import *
 
 class shci_github_repo_info:
     owner:str        = ""
-    access_token:str = ""
     repo_name:str    = ""
-    recursive:bool   = True
     dir:str          = ""
-    push:bool        = True
     _os:str          = ""
     markdown:str     = ""
     start:float      = 0.0
@@ -55,16 +52,10 @@ def shci_read_text(path: str) -> str:
 def shci_read_arg(arg:str, repo:shci_github_repo_info):
     if (arg.startswith("owner=")):
         repo.owner = arg.removeprefix("owner=")
-    elif (arg.startswith("access_token=")):
-        repo.access_token = arg.removeprefix("access_token=")
     elif (arg.startswith("repo_name=")):
         repo.repo_name = arg.removeprefix("repo_name=")
-    elif (arg.startswith("recursive=")):
-        repo.recursive = bool(arg.removeprefix("recursive="))
     elif (arg.startswith("repo_dir=")):
         repo.dir = arg.removeprefix("repo_dir=")
-    elif (arg.startswith("push=")):
-        repo.push = bool(arg.removeprefix("push="))
     elif (arg.startswith("prerequisites=")):
         repo.prerequisites_file = arg.removeprefix("prerequisites=")
     elif (arg.startswith("prerequisites_output=")):
@@ -151,25 +142,6 @@ def shci_print_info(repo:shci_github_repo_info):
     
     return    
 
-def shci_clone_github_repo(repo:shci_github_repo_info):
-
-    cmd:str = ""
-    if (repo.recursive == True):
-        cmd += "git clone --recursive "
-    else:
-        cmd += "git clone "
-
-    cmd += f"https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name} {repo.dir}"
-    
-    print(f"shci cloning repo: {cmd}\n")
-
-    try:
-        os.system(cmd)
-    except Exception:
-        print("shci: Script is running")
-
-    return
-
 def shci_pull_repo(repo:shci_github_repo_info):
     pull:str = f"cd {repo.dir} && git clean -df && git pull && git submodule update --init --recursive"
     print(f"shci: {pull}")
@@ -204,19 +176,12 @@ build ran for `{str("%.2f" % (end - repo.start))} s` and terminated with exit co
 """
     shci_write_text(f"{repo.dir}/.shci/{repo._os}/log.md", repo.markdown)
 
-    #push:str = f"dir && cd {repo.dir}"
-    #push += f" && git add --all && git commit -a -m \"shci exit_code\" && git push https://{repo.access_token}@github.com/{repo.owner}/{repo.repo_name}"
-    #if (repo.push == True):
-    #    print(f"shci: {push}")
-    #    os.system(push)
-
     return
 
 def main():
 
     repo:shci_github_repo_info = shci_github_repo_info()
 
-    #shci_clone_github_repo(repo)
     for i in range (0, len(sys.argv), 1):
         shci_read_arg(str(sys.argv[i]), repo)
 
