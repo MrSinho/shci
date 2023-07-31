@@ -10,7 +10,7 @@ def shci_test_read_text(path: str) -> str:
     file.close()
     return data
 
-def main():#python shci-test.py shthreads
+def main():#python shci-test.py shvulkan #copy this file to the folder before the git repository
     
     #os.system("cd shci_root && git stash && git pull")
     #shutil.copy2(f"shci_root/shci/python/shci.py", f"{str(sys.argv[1])}/shci.py")
