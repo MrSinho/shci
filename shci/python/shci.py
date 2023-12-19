@@ -151,11 +151,11 @@ def shci_build_status(repo:shci_github_repo_info, exit_code:int):
     badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}/exit_code.svg", "wb")
     if (exit_code == 0):#success
         print("shci: Build success\n")
-        clone_badge:Response = requests.get(f"https://img.shields.io/badge/{repo._os}-passing-green.svg")
+        clone_badge:Response = requests.get(f"https://img.shields.io/badge/shci_test_passing-006400?style=for-the-badge&logo={repo._os}&logoColor=white&labelColor=003200&label={repo._os}#.svg")
         badge_file.write(clone_badge.content)
     else:
         print("shci: Build failure\n")
-        clone_badge:Response = requests.get(f"https://img.shields.io/badge/{repo._os}-failure-red.svg")
+        clone_badge:Response = requests.get(f"https://img.shields.io/badge/shci_test_failure-640000?style=for-the-badge&logo={repo._os}&logoColor=white&labelColor=320000&label={repo._os}#.svg")
         badge_file.write(clone_badge.content)
     badge_file.flush()
     badge_file.close()
