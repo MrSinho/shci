@@ -146,7 +146,7 @@ def shci_pull_repo(repo:shci_github_repo_info):
 
 def shci_build_status(repo:shci_github_repo_info, exit_code:int):
     print(f"shci repo dir: {repo.dir}")
-    badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}/exit_code.svg", "wb")
+    badge_file:TextIOWrapper = open(f"{repo.dir}/.shci/{repo._os}/{repo.os}-exit-code.svg", "wb")
     if (exit_code == 0):#success
         print("shci: Build success\n")
         clone_badge:Response = requests.get(f"https://img.shields.io/badge/shci_test_passing-006400?style=for-the-badge&logo={repo._os}&logoColor=white&labelColor=003200&label={repo._os}#.svg")
