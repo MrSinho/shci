@@ -82,8 +82,6 @@ cores         : {str(psutil.cpu_count(logical=False))}
     print(f"shci cpu info: {cpu_info}")
     
     repo.markdown = f"""
-# {repo.repo_name}
-
 # {repo._os.capitalize()} build logs
 
 ![](exit_code.svg)
