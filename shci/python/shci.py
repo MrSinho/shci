@@ -84,7 +84,7 @@ cores         : {str(psutil.cpu_count(logical=False))}
     repo.markdown = f"""
 # {repo._os.capitalize()} build logs
 
-![](exit_code.svg)
+![]({repo._os}-exit-code.svg)
 
 ```{cpu_info}```
 
