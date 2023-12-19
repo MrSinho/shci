@@ -84,9 +84,9 @@ cores         : {str(psutil.cpu_count(logical=False))}
     repo.markdown = f"""
 # {repo.repo_name}
 
-![{repo._os}-badge](exit_code.svg)
+# {repo._os.capitalize()} build logs
 
-## [{repo._os} build logs:](https://github.com/mrsinho/shci)
+![](exit_code.svg)
 
 ```{cpu_info}```
 
