@@ -118,9 +118,6 @@ def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> 
 def shci_print_info(repo:shci_github_repo_info):
     
     print(f"""shci:
-    owner: {repo.owner},
-    repo name: {repo.repo_name},
-    repo directory: {repo.dir},
     prerequisites file: {repo.prerequisites_file},
     prerequisites output file: {repo.prerequisites_output_file},
     build file: {repo.build_file},
