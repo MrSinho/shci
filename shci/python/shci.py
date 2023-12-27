@@ -13,9 +13,6 @@ from subprocess import *
 
 
 class shci_github_repo_info:
-    owner:str        = ""
-    repo_name:str    = ""
-    dir:str          = ""
     _os:str          = ""
     markdown:str     = ""
     start:float      = 0.0
@@ -50,13 +47,7 @@ def shci_read_text(path: str) -> str:
     return data
 
 def shci_read_arg(arg:str, repo:shci_github_repo_info):
-    if (arg.startswith("owner=")):
-        repo.owner = arg.removeprefix("owner=")
-    elif (arg.startswith("repo_name=")):
-        repo.repo_name = arg.removeprefix("repo_name=")
-    elif (arg.startswith("repo_dir=")):
-        repo.dir = arg.removeprefix("repo_dir=")
-    elif (arg.startswith("prerequisites=")):
+    if (arg.startswith("prerequisites=")):
         repo.prerequisites_file = arg.removeprefix("prerequisites=")
     elif (arg.startswith("prerequisites_output=")):
         repo.prerequisites_output_file = arg.removeprefix("prerequisites_output=")
