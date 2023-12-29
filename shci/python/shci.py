@@ -87,16 +87,16 @@ def shci_call(repo:shci_github_repo_info, command_file:str, output_file:str) -> 
     build_script:str = ""
 
     if (repo._os == "windows"):
-        build_script = f"call {command_file}"
+        build_script = f"call ./{command_file}"
     else:
-        build_script = f"sudo bash {command_file}"
+        build_script = f"sudo bash ./{command_file}"
         
     print(f"shci executing: {build_script}")
     r:_wrap_close = os.popen(build_script)
     exit_code:int = r._proc.wait()
 
-    cmd:str = shci_read_text(f"{command_file}")
-    output:str = shci_read_text(f"{output_file}")
+    cmd:str    = shci_read_text(f"./{command_file}")
+    output:str = shci_read_text(f"./{output_file}")
 
     print(f"shci call command: {cmd}")
     print(f"shci call command output: {output}")
@@ -127,7 +127,7 @@ def shci_print_info(repo:shci_github_repo_info):
     return
 
 def shci_build_status(repo:shci_github_repo_info, exit_code:int):
-    badge_file:TextIOWrapper = open(f".shci/{repo._os}/{repo._os}-exit-code.svg", "wb")
+    badge_file:TextIOWrapper = open(f"./.shci/{repo._os}/{repo._os}-exit-code.svg", "wb")
     if (exit_code == 0):#success
         print("shci: Build success\n")
         clone_badge:Response = requests.get(f"https://img.shields.io/badge/shci_test_passing-006400?style=for-the-badge&logo={repo._os}&logoColor=white&labelColor=003200&label={repo._os}#.svg")
@@ -151,7 +151,7 @@ build ran for `{str("%.2f" % (end - repo.start))} s` and terminated with exit co
 ---
 
 """
-    shci_write_text(f".shci/{repo._os}/log.md", repo.markdown)
+    shci_write_text(f"./.shci/{repo._os}/log.md", repo.markdown)
 
     return
 
